@@ -8,6 +8,11 @@ namespace Dafhne.Board
             get{ return _blockType; }
             set{ _blockType = value; }
         }
+
+        public Block(BlockType blockType)
+        {
+            _blockType = blockType;
+        }
     }
 }
 

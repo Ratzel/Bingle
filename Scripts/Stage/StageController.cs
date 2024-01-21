@@ -23,7 +23,15 @@ namespace Dafhne.Stage
                 return;
             }
             _isInit = true;
+            BuildStage();
+            _stage.PrintAll();
         }
+
+        void BuildStage()
+        {
+            _stage = StageBuilder.BuildStage(nStage : 1, nRow : 9, nCol : 9);
+        }
+        
     }
 }
 
