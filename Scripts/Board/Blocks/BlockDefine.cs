@@ -1,18 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System;
 
-public class BlockDefine : MonoBehaviour
+namespace Dafhne.Board
 {
-    // Start is called before the first frame update
-    void Start()
+    public enum BlockType
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        EMPTY = 0,
+        BASIC = 1
     }
 }
+

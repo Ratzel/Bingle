@@ -1,18 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Block : MonoBehaviour
+namespace Dafhne.Board
 {
-    // Start is called before the first frame update
-    void Start()
+    public class Block
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private BlockType _blockType;
+        public BlockType Type
+        {
+            get{ return _blockType; }
+            set{ _blockType = value; }
+        }
     }
 }
+

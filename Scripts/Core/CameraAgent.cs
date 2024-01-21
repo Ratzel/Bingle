@@ -14,10 +14,4 @@ public class CameraAgent : MonoBehaviour
         //m_BoardUnit의 외부 입력값을 이용하여 실행시 orthographicSize를 재계산하여 대응)
         m_TargetCamera.orthographicSize = m_BoardUnit / m_TargetCamera.aspect;   
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
