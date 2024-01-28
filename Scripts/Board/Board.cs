@@ -10,11 +10,11 @@ namespace Dafhne.Board
     public class Board
     {
         //보드의 정보 정의
-        private int _nCol; //행 수
-        private int _nRow; //열 수
+        private int _maxCol; //행 수
+        private int _maxRow; //열 수
 
-        public int MaxCol { get { return _nCol; } }
-        public int MaxRow { get { return _nRow; } }
+        public int MaxCol { get { return _maxCol; } }
+        public int MaxRow { get { return _maxRow; } }
 
         //cell
         Cell[,] _cells;
@@ -25,16 +25,16 @@ namespace Dafhne.Board
         public Block[,] Blocks{ get { return _blocks; } }
         
 
-        public Board(int nCol, int nRow)
+        public Board(int maxCol, int maxRow)
         {
-            _nCol = nCol;
-            _nRow = nRow;
+            _maxCol = maxCol;
+            _maxRow = maxRow;
 
             //create cell
-            _cells = new Cell[nCol, nRow];
+            _cells = new Cell[maxCol, maxRow];
 
             //creak block
-            _blocks = new Block[nCol, nRow];
+            _blocks = new Block[maxCol, maxRow];
         }
     }
 }

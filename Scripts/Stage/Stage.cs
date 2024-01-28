@@ -22,7 +22,8 @@ namespace Dafhne.Stage
         
         public Block[,] Blocks { get { return _board.Blocks; } }
         public Cell[,] Cells { get { return _board.Cells; } }
-
+        
+        //Stage 생성자
         public Stage(StageBuilder stageBuilder, int row, int col)
         {
             _nRow = row;
@@ -32,6 +33,8 @@ namespace Dafhne.Stage
 
             _board = new Board.Board(row, col);
         }
+
+        //디버그용 : 각 객체 생성및 생성 데이터 확인 
         public void PrintAll()
         {
             System.Text.StringBuilder strCells = new System.Text.StringBuilder();

@@ -9,8 +9,6 @@ namespace Dafhne.Stage
         bool _isInit;
         Stage _stage;
 
-
-        // Start is called before the first frame update
         void Start()
         {
             InitStage();
@@ -18,12 +16,17 @@ namespace Dafhne.Stage
 
         void InitStage()
         {
+            //초기화 체크
             if (_isInit)
             {
                 return;
             }
             _isInit = true;
+
+            //최초스테이지 
             BuildStage();
+
+            //디버깅
             _stage.PrintAll();
         }
 

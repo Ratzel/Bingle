@@ -4,11 +4,11 @@ namespace Dafhne.Stage
 {
     public class StageBuilder
     {
-        int _nStage;
+        int _maxStage;
 
-        public StageBuilder(int nStage)
+        public StageBuilder(int maxStage)
         {
-            _nStage = nStage;
+            _maxStage = maxStage;
         }
 
         public Stage ComposeStage(int row, int col)
