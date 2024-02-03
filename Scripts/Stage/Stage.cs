@@ -33,6 +33,10 @@ namespace Dafhne.Stage
 
             _board = new Board.Board(row, col);
         }
+        internal void ComposeStage(GameObject cellPrefab, GameObject blockPrefab, Transform rootObj)
+        {
+            _board.ComposeStage(cellPrefab, blockPrefab, rootObj);
+        }
 
         //디버그용 : 각 객체 생성및 생성 데이터 확인 
         public void PrintAll()
