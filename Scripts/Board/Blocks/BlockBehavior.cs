@@ -13,7 +13,7 @@ namespace Dafhne.Board{
         void Start()
         {
             _spriteRenderer = GetComponent<SpriteRenderer>();
-
+            UpdateView(false);
         }
 
         internal void SetBlock(Block block)
@@ -26,9 +26,11 @@ namespace Dafhne.Board{
             if(_block.Type == BlockType.EMPTY)
             {
                 _spriteRenderer.sprite = null;
-            }else if(_block.Type == BlockType.BASIC)
+            }
+            else if(_block.Type == BlockType.BASIC)
             {
-                _spriteRenderer.sprite = _blockConfig.basicBlockSprites[2];
+                 int elementIndex = (int)_block.BlockElement;
+                _spriteRenderer.sprite = _blockConfig.basicBlockSprites[elementIndex];
             }
         }
     }

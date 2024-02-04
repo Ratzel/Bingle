@@ -64,6 +64,7 @@ namespace Dafhne.Board
 
                     Block block = _blocks[nRow, nCol]?.InstantiateBlockObj(blockPrefab, rootObj);
                     block?.Move(initX + nCol, initY + nRow);
+                    
                 }
             }
 

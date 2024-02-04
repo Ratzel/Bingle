@@ -28,7 +28,7 @@ namespace Dafhne.Stage
 
         Block SpawnBlockForStage(int nRow, int nCol)
         {
-            return new Block(BlockType.BASIC);
+            return nRow == nCol ? SpawnEmptyBlock() : SpawnBlock();
         }
 
         Cell SpawnCellForStage(int nRow, int nCol)
@@ -36,6 +36,15 @@ namespace Dafhne.Stage
             return new Cell(CellType.BASIC);
         }
         
+        public Block SpawnBlock()
+        {
+            return BlockFactory.SpwanBlock(BlockType.BASIC);
+        }
+
+        public Block SpawnEmptyBlock()
+        {
+            return BlockFactory.SpwanBlock(BlockType.EMPTY);
+        }
         public static Stage BuildStage(int nStage, int nRow, int nCol)
         {
             StageBuilder stageBuilder = new StageBuilder(0);

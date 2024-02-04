@@ -37,7 +37,6 @@ namespace Dafhne.Board
 
             //3. cell 오브젝트에 적용되어있는 CellBehavior 컴토넌트를 보관한다. 
             this.CellBehavior = newObj.transform.GetComponent<CellBehavior>();
-
             return this;
         }
 

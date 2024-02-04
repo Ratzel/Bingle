@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TargetCamera: {fileID: 519420031}
-  m_BoardUnit: 8.12
+  m_BoardUnit: 4.6
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
