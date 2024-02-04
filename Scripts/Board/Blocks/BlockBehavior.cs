@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Dafhne.Scriptable;
 using UnityEngine;  
 namespace Dafhne.Board{
     public class BlockBehavior : MonoBehaviour
     {
+        [SerializeField] BlockConfig _blockConfig;
+
         Block _block;
         SpriteRenderer _spriteRenderer;
 
@@ -23,6 +26,9 @@ namespace Dafhne.Board{
             if(_block.Type == BlockType.EMPTY)
             {
                 _spriteRenderer.sprite = null;
+            }else if(_block.Type == BlockType.BASIC)
+            {
+                _spriteRenderer.sprite = _blockConfig.basicBlockSprites[2];
             }
         }
     }
