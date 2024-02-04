@@ -61,6 +61,9 @@ namespace Dafhne.Board
                         cell.Type = CellType.EMPTY;
                     }
                     cell?.Move(initX + nCol, initY + nRow);
+
+                    Block block = _blocks[nRow, nCol]?.InstantiateBlockObj(blockPrefab, rootObj);
+                    block?.Move(initX + nCol, initY + nRow);
                 }
             }
 
