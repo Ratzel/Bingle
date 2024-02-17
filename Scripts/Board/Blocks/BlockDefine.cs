@@ -7,7 +7,7 @@ namespace Dafhne.Board
     }
     public enum BlockElement
     {
-        NA = -1,
+        NONE = -1,
         ELEMENT_DEEPWATER = 0,
         ELEMENT_CLOVER,
         ELEMENT_HEART,

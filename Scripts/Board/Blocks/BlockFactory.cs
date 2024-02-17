@@ -13,7 +13,7 @@ namespace Dafhne.Board
             }
             else if(blockType == BlockType.EMPTY)
             {
-                block.BlockElement = BlockElement.NA;
+                block.BlockElement = BlockElement.NONE;
             }
 
             return block;
