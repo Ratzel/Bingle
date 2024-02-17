@@ -1,9 +1,11 @@
+using System.Diagnostics;
 using Dafhne.Board;
 
 namespace Dafhne.Stage
 {
     public class StageBuilder
     {
+        StageInfo _stageInfo;
         int _maxStage;
 
         public StageBuilder(int maxStage)
@@ -11,13 +13,19 @@ namespace Dafhne.Stage
             _maxStage = maxStage;
         }
 
-        public Stage ComposeStage(int row, int col)
+        public Stage ComposeStage()
         {
-            //Stage객체를 생성한다. 
-            Stage stage = new Stage(this, row, col);
-            for(int nRow = 0; nRow < row; nRow++)
+            Debug.Assert(_maxStage > 0, $"invalidate stage {_maxStage}");
+            //0. 스테이정보를 로드한다. 
+            _stageInfo = StageReader.LoadStage(_maxStage);
+
+            //1. Stage객체를 생성한다. 
+            Stage stage = new Stage(this, _stageInfo.MaxRow, _stageInfo.MaxCol);
+
+            //2. Cell, Block값을 초기화 한다. 
+            for(int nRow = 0; nRow < _stageInfo.MaxRow; nRow++)
             {
-                for(int nCol = 0; nCol < col; nCol++)
+                for(int nCol = 0; nCol < _stageInfo.MaxCol; nCol++)
                 {
                     stage.Blocks[nRow, nCol] = SpawnBlockForStage(nRow, nCol);
                     stage.Cells[nRow, nCol] = SpawnCellForStage(nRow, nCol);
@@ -28,12 +36,19 @@ namespace Dafhne.Stage
 
         Block SpawnBlockForStage(int nRow, int nCol)
         {
-            return nRow == nCol ? SpawnEmptyBlock() : SpawnBlock();
+            if(_stageInfo.GetCellType(nRow,nCol) == CellType.EMPTY)
+            {
+                return SpawnEmptyBlock();
+            }
+            return SpawnBlock();
         }
 
         Cell SpawnCellForStage(int nRow, int nCol)
         {
-            return new Cell(CellType.BASIC);
+            Debug.Assert( _stageInfo != null);
+            Debug.Assert(_stageInfo.MaxRow > nRow && _stageInfo.MaxCol > nCol);
+
+            return CellFactory.SpawnCell(_stageInfo, nRow, nCol);
         }
         
         public Block SpawnBlock()
@@ -45,10 +60,10 @@ namespace Dafhne.Stage
         {
             return BlockFactory.SpwanBlock(BlockType.EMPTY);
         }
-        public static Stage BuildStage(int nStage, int nRow, int nCol)
+        public static Stage BuildStage(int nStage)
         {
-            StageBuilder stageBuilder = new StageBuilder(0);
-            Stage stage = stageBuilder.ComposeStage(nRow, nCol);
+            StageBuilder stageBuilder = new StageBuilder(nStage);
+            Stage stage = stageBuilder.ComposeStage();
 
             return stage;
         }
