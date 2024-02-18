@@ -38,7 +38,7 @@ namespace Dafhne.Stage
         void BuildStage()
         {
             //1. Stage 를 구성한다. 
-            _stage = StageBuilder.BuildStage(nStage : 3);
+            _stage = StageBuilder.BuildStage(nStage : 1);
 
             //2. 생성한 stage 정보를 이용하여 씬ㅇㄹ 구성한다. 
             _stage.ComposeStage(_cellPrefab, _blockPrefab, _rootObj);
