@@ -30,6 +30,44 @@ namespace Dafhne.Board
                 _blockBehavior?.UpdateView(true);
             }
         }
+
+        public Transform BlockObj
+        {
+            get { return _blockBehavior?.transform; }
+        }
+
+        Vector2Int _vecDuplicate; //블럭 중복 개수, Shuffle시에 중복 검사에 사용 
+
+        public int HorizonDuplicate //가로방향 중복 검사시 사용
+        {
+            get { return _vecDuplicate.x; }
+            set { _vecDuplicate.x = value; }
+        }
+
+        public int VerticalDuplicate
+        {
+            get { return _vecDuplicate.y; }
+            set { _vecDuplicate.y = value; }
+        }
+
+        public void ResetDuplicationInfo()
+        {
+            _vecDuplicate.x = 0;
+            _vecDuplicate.y = 0;
+        }
+
+        public bool IsEqual(Block target)
+        {
+            if (IsMatchableBlock() && this.BlockElement == target.BlockElement)
+            {
+                return true;
+            }
+            return false;
+        }
+        public bool IsMatchableBlock()
+        {
+            return !(Type == BlockType.EMPTY);
+        }
         public Block(BlockType blockType)
         {
             _blockType = blockType;

@@ -48,6 +48,10 @@ namespace Dafhne.Board
             _blockPrefab = blockPrefab;
             _rootObj = rootObj;
 
+            //2. 3매치된 블럭이 없도록 섞는다.
+            BoardShuffler shuffler = new BoardShuffler(this, true);
+            shuffler.Shuffle();
+
             //2. Cell, Block Prefab 을 이용해서 Board 에 Cell/Block GameObject를 추가한다. 
             float initX = CalcInitX(0.5f);
             float initY = CalcInitY(0.5f);
@@ -56,10 +60,6 @@ namespace Dafhne.Board
                 for(int nCol = 0; nCol < _maxCol; nCol++)
                 {
                     Cell cell = _cells[nRow, nCol]?.InstantiateCellObj(cellPrefab, rootObj);
-                    if(nRow == nCol) // 테스트 코드
-                    {
-                        cell.Type = CellType.EMPTY;
-                    }
                     cell?.Move(initX + nCol, initY + nRow);
 
                     Block block = _blocks[nRow, nCol]?.InstantiateBlockObj(blockPrefab, rootObj);
@@ -78,6 +78,31 @@ namespace Dafhne.Board
         public float CalcInitY(float offset = 0)
         {
             return -_maxRow / 2.0f + offset;
+        }
+
+        public bool CanShuffle(int nRow, int nCol, bool isLoading)
+        {
+            if(_cells[nRow, nCol].Type.IsBlockMoveableType())
+                return false;
+            
+            return true;
+        }
+
+        public void ChangeBlock(Block block, BlockElement notAllowedElement)
+        {
+            BlockElement generateElement;
+
+            while(true)
+            {
+                generateElement = (BlockElement) UnityEngine.Random.Range(0,6);
+
+                if (notAllowedElement == generateElement)
+                    continue;
+
+                break;
+            }
+
+            block.BlockElement = generateElement;
         }
     }
 }

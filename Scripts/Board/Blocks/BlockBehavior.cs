@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Dafhne.Scriptable;
 using UnityEngine;  
-namespace Dafhne.Board{
+
+namespace Dafhne.Board
+{
     public class BlockBehavior : MonoBehaviour
     {
         [SerializeField] BlockConfig _blockConfig;
