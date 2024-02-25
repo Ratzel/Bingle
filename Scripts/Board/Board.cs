@@ -104,6 +104,11 @@ namespace Dafhne.Board
 
             block.BlockElement = generateElement;
         }
+
+        public bool IsSwipeable(int nRow, int nCol)
+        {
+            return _cells[nRow, nCol].Type.IsBlockMoveableType();
+        }
     }
 }
 
