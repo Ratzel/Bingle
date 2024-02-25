@@ -10,16 +10,16 @@ namespace Dafhne.Stage
         [SerializeField] GameObject _cellPrefab;
         [SerializeField] GameObject _blockPrefab;
 
-
         bool _isInit;
         Stage _stage;
-        InputManager _inputManager;
         
         //Members for Event 
         bool _isTouchDown; //입력상태 처리 플래그, 유효한 블럭을 클릭한 경우 true
         BlockPos _blcokDownPos; //블럭 위치 (보드에 저장된 위치)
         Vector3 _clickPos; //DOWN 위치(보드 기준 Local 좌표)
         
+        InputManager _inputManager;
+        ActionManager _actionManager;
 
         void Start()
         {
@@ -47,6 +47,7 @@ namespace Dafhne.Stage
         {
             //1. Stage 를 구성한다. 
             _stage = StageBuilder.BuildStage(nStage : 1);
+            _actionManager = new ActionManager(_rootObj, _stage);
 
             //2. 생성한 stage 정보를 이용하여 씬ㅇㄹ 구성한다. 
             _stage.ComposeStage(_cellPrefab, _blockPrefab, _rootObj);
@@ -97,6 +98,11 @@ namespace Dafhne.Stage
                 
                 Debug.Log($"Swipe = {swipeDir}, Block = {_blcokDownPos}");
                 
+                if(swipeDir != Swipe.NONE)
+                {
+                    _actionManager.DoSwipeAction(_blcokDownPos.row, _blcokDownPos.col, swipeDir);
+                }
+
                 _isTouchDown = false;
                 
             }

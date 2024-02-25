@@ -102,6 +102,15 @@ namespace Dafhne.Board
         {
             return Type != BlockType.EMPTY;
         }
+
+        public void MoveTo(Vector3 to, float duration)
+        {
+            _blockBehavior.StartCoroutine(Util.Action2D.MoveTo(BlockObj, to, duration));
+        }
+        public bool IsSwipeable(Block baseBlock)
+        {
+            return true;
+        }
     }
 }
 

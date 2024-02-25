@@ -17,7 +17,7 @@ namespace Dafhne.Util
         //LEFT : 135 ~ 255
         //DOWN : 225 ~ 315
         //RIGHT : 0 ~ 45, 0 ~ 315
-        
+
         public static Swipe EvalSwipeDir(Vector2 vectStart, Vector2 vecEnd)
         {
             float angle = EvalDragAngle(vectStart, vecEnd);
@@ -57,6 +57,26 @@ namespace Dafhne.Util
             }
 
             return aimAngle * Mathf.Rad2Deg;
+        }
+
+        public static int GetTargetRow(this Swipe swipeDir)
+        {
+            switch(swipeDir)
+            {
+                case Swipe.DOWN : return -1;
+                case Swipe.UP : return 1;
+                default : return 0;
+            }
+        }
+
+        public static int GetTargetCol(this Swipe swipeDir)
+        {
+            switch(swipeDir)
+            {
+                case Swipe.LEFT : return -1;
+                case Swipe.RIGHT : return 1;
+                default : return 0;
+            }
         }
     }
 }
