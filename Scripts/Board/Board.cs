@@ -115,7 +115,7 @@ namespace Dafhne.Board
             return _cells[nRow, nCol].Type.IsBlockMoveableType();
         }
 
-        public IEnumerator Evalute(Returnable<bool> matchResult)
+        public IEnumerator Evaluate(Returnable<bool> matchResult)
         {
             //1. 모든 블럭의 매칭 정보(개수, 상태, 내구도 등)를 계산한후, 3매치 블럭이 있으면 true리턴
             bool isMatchedBlockFound = UpdateAllBlocksMatchedStatus();
