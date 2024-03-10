@@ -51,8 +51,26 @@ namespace Dafhne.Stage
                 Returnable<bool> isSwipeBlock = new Returnable<bool>(false);
                 yield return _stage.CoDoSwipeAction(nRow, nCol, swipeDir, isSwipeBlock);
 
+                //2. 스와이프 성공한 경우 보드를 평가(매치블럭삭제, 빈블럭 드롭, 새블럭 Spawn 등)한다.
+                if(isSwipeBlock.value)
+                {
+                    Returnable<bool> isMatchBlock = new Returnable<bool>(false);
+                    yield return EvaluteBoard(isMatchBlock);
+
+                    //스와이프한 블럭이 매치되지 않은 경우에 원상태 복귀
+                    if(!isMatchBlock.value)
+                    {
+                        yield return _stage.CoDoSwipeAction(nRow,nCol, swipeDir, isSwipeBlock);
+                    }
+                }
+
                 _isRunning = false; //액션 실행 상태 off 
             }
+         }
+
+         IEnumerator EvaluteBoard(Returnable<bool> matchResult)
+         {
+            yield return _stage.Evaluate(matchResult);
          }
     }
 }

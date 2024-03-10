@@ -124,7 +124,10 @@ namespace Dafhne.Stage
                 default : return false;
             }
         }
-
+        public IEnumerator Evaluate(Returnable<bool> matchResult)
+        {
+            yield return _board.Evalute(matchResult);
+        }
         //디버그용 : 각 객체 생성및 생성 데이터 확인 
         public void PrintAll()
         {

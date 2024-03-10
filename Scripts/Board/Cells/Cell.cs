@@ -44,5 +44,9 @@ namespace Dafhne.Board
         {
             CellBehavior.transform.position = new Vector3(x, y);
         }
+        public bool IsObstracle()
+        {
+            return Type == CellType.EMPTY;
+        }
     }
 }

@@ -35,5 +35,10 @@ namespace Dafhne.Board
                 _spriteRenderer.sprite = _blockConfig.basicBlockSprites[elementIndex];
             }
         }
+
+        public void DoActionClear()
+        {
+            Destroy(gameObject);
+        }
     }
 }
