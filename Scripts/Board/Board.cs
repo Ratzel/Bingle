@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Dafhne.Quest;
 using Dafhne.Util;
 using UnityEngine;
 
+
 namespace Dafhne.Board
-{
+{    
     // Board는 Cell 과 Block으로 구성
     // Cell은 움직이지 않는 요소(ex:JellyType, Empty)
     // Block은 실제로 움직이거나 제거되는 구성요소
@@ -287,6 +289,91 @@ namespace Dafhne.Board
         {
             int nMatchCount = blockList.Count;
             blockList.ForEach(block => block.UpdateBlockStatusMatched((MatchType)nMatchCount));
+        }
+
+        public IEnumerator ArrangeBlocksAfterClean(List<KeyValuePair<int, int>> unfilledBlocks, List<Block> movingBlocks)
+        {
+            SortedList<int, int> emptyBlocks = new SortedList<int, int>();
+            List<KeyValuePair<int, int>> emptyRemainBlocks = new List<KeyValuePair<int, int>>();
+
+            for(int nCol = 0; nCol < _maxCol; nCol++)
+            {
+                emptyBlocks.Clear();
+
+                //1. 같은 열(col) 에 빈 블럭을 수집한다. 
+                //현재 col의 다른 row 의 비어있는 블럭 인덱스를 수집한다. sortedList이므로 첫번째 노드가 가장 아래쪽 블럭 위치다.
+                for(int nRow = 0; nRow < _maxRow; nRow++)
+                {
+                    if(CanBlockBeAllocatable(nRow, nCol))
+                    {
+                        emptyBlocks.Add(nRow,nRow);
+                    }
+                }
+
+                //아래쪽에 비어있는 블럭이 없는 경우
+                if(emptyBlocks.Count == 0)
+                {
+                    continue;
+                }
+
+                //2. 이동이 가능한 블럭을 비어있는 하단 위치로 이동한다. 
+
+                //2.1 가장 아래쪽부터 비어있는 블럭을 처리한다. 
+                KeyValuePair<int, int> first = emptyBlocks.First();
+
+                //2.2 비어있는 블럭 위쪽 방향으로 이동 가능한 블럭을 탐색하면서 빈 블럭을 채워나간다. 
+                for(int nRow = first.Value + 1; nRow < _maxRow; nRow++)
+                {
+                    Block block = _blocks[nRow, nCol];
+
+                    //2.2.1 이동 가능한 아이템이 아닌 경우 Passs
+                    if(block == null || _cells[nRow, nCol].Type == CellType.EMPTY) //ToDO EMPTY를 직접 체크하지 않고 이러한 부류를 함수로 체크
+                    {
+                        continue;
+                    }
+
+                    //2.2.3 이동이 필요한 블럭 발견
+                    block.dropDistance = new Vector2(0, nRow - first.Value); // GameObject 에니메이션 이동
+                    movingBlocks.Add(block);
+
+                    //2.2.4 빈공간으로 이동
+                    Debug.Assert(_cells[first.Value, nCol].IsObstracle() == false, $"{_cells[first.Value, nCol]}");
+                    _blocks[first.Value, nCol] = block; // 이동될 위치로 Board에서 저장된 위치 이동
+
+                    //2.2.5 다른 곳으로 이동했으므로 현재 위치는 비워둔다. 
+                    _blocks[nRow, nCol] = null;
+
+                    //2.2.6 비어있는 블럭 리스트에서 사용된 첫번째 노드(first)를 삭제한다. 
+                    emptyBlocks.RemoveAt(0);
+
+                    //2.2.7 현재 위치의 블럭이 다른 위치로 이동했으므로 현재 위치가 비어있게 된다. 
+                    //그러므로 비어있는 블럭을 보관하는 emptyBlocks에 추가한다. 
+                    emptyBlocks.Add(nRow, nRow);
+
+                    //2.2.8 다음(Next) 비어있는 블럭을 처리하도록 기준을 변경한다. 
+                    first = emptyBlocks.First();
+                    nRow = first.Value; //Note : 빈곳 바로 위부터 처리하도록 위치 조정, for 문에서 nRow++ 하기때문에 +1을 하지 않는다.
+                }
+            }
+
+            yield return null;
+
+            //드롭으로 채워지지 않는 블럭이 잏는경우 (왼쪽 아래 순으로 들어가있음)
+            if(emptyRemainBlocks.Count > 0)
+            {
+                unfilledBlocks.AddRange(emptyRemainBlocks);
+            }
+
+            yield break;
+        }
+
+        bool CanBlockBeAllocatable(int nRow, int nCol)
+        {
+            if(!_cells[nRow, nCol].Type.IsBlockAllocatableType())
+            {
+                return false;
+            }
+            return _blocks[nRow, nCol] == null;
         }
     }
 }

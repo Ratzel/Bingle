@@ -10,6 +10,8 @@ namespace Dafhne.Board
         public MatchType _matchType = MatchType.NONE;
         public short _matchCount;
 
+        BlockActionBehavior _blockActionBehavior;
+
         int _nDurability; //내구도, 0이되면 제거 
         public virtual int Durability
         {
@@ -111,7 +113,8 @@ namespace Dafhne.Board
 
             //3. Block 오브젝트에 적용된 BlockBehavior 컴포넌트를 보관한다. 
             this.BlockBehavior = newObject.GetComponent<BlockBehavior>();
-
+            _blockActionBehavior = newObject.transform.GetComponent<BlockActionBehavior>();
+            
             return this;
         }
 
@@ -210,6 +213,23 @@ namespace Dafhne.Board
             Debug.Assert(BlockObj != null, $"{_matchType}");
             BlockBehavior.DoActionClear();
         }
+
+        public bool isMoving
+        {
+            get
+            {
+                return BlockObj != null && _blockActionBehavior.isMoving;
+            }
+        }
+
+        public Vector2 dropDistance
+        {
+            set
+            {
+                _blockActionBehavior?.MoveDrop(value);
+            }
+        }
+        
     }
 }
 

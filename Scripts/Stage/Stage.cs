@@ -148,5 +148,50 @@ namespace Dafhne.Stage
             Debug.Log(strBlocks.ToString());
             Debug.Log(strCells.ToString());
         }
+
+        //매칭된 블럭을 제거한후의 후처리 로직을 담당한다. 
+        //빈 블럭에 상위 블럭을 Drop해서 채운 후에 새로운 블럭으로 빈자리를 채운다.
+        public IEnumerator PostProcessAfterEvaluate()
+        {
+            List<KeyValuePair<int, int>> unfilledBlocks = new List<KeyValuePair<int, int>>();
+            List<Block> movingBlocks = new List<Block>();
+
+            //1. 제거된 블럭에 따라, 블럭 재배치 (상위 -> 하위 이동/애니메이션)
+            yield return _board.ArrangeBlocksAfterClean(unfilledBlocks, movingBlocks);
+
+            //2. 유저에게 생성된 블럭이 잠시동안 보이도록 다른 블럭이 드롭되는 동안 대기한다. 
+            yield return WaitForDropping(movingBlocks);
+        }
+
+        //리스트에 포함되 블럭의 애니메이션이 끝날때 까지 기다린다. 
+        public IEnumerator WaitForDropping(List<Block> movingBlock)
+        {
+            WaitForSeconds waitForSeconds = new WaitForSeconds(0.05f); //50ms 마다 검사한다.
+
+            while(true)
+            {
+                bool isContinue = false;
+
+                //이동 중인 블럭이 있는지 검사한다. 
+                for(int i =0; i < movingBlock.Count; i++)
+                {
+                    if(movingBlock[i].isMoving)
+                    {
+                        isContinue = true;
+                        break;
+                    }
+                }
+
+                if(!isContinue)
+                {
+                    break;
+                }
+
+                yield return waitForSeconds;
+            }
+
+            movingBlock.Clear();
+            yield break;
+        }
     }
 }

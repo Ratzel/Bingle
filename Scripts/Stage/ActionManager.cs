@@ -70,8 +70,33 @@ namespace Dafhne.Stage
 
          IEnumerator EvaluteBoard(Returnable<bool> matchResult)
          {
-            yield return _stage.Evaluate(matchResult);
-         }
+            bool isFirst = true;
+
+            while(true) //매칭된 블럭이 있는 경우 반복 수행한다.
+            {
+                //1. 매치 블럭 제거 
+                Returnable<bool> isBlockMatched = new Returnable<bool>(false);
+                yield return StartCoroutine(_stage.Evaluate(isBlockMatched));
+
+                //2. 3매치 블럭이 있는 경우 후처리 실행(블럭 드롭 등)
+                if(isBlockMatched.value)
+                {
+                    matchResult.value = true;
+
+                    //매칭 블럭 제거 후 빈블럭 드롭 후 새 블럭 생성
+                    yield return StartCoroutine(_stage.PostProcessAfterEvaluate());
+                }
+                else
+                {
+                    //3. 3매치 블럭이 없는 경우 while문 종료 
+                    break;
+                }
+
+                
+            }
+
+            yield break;
+        }
     }
 }
 
