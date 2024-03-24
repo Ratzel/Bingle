@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Dafhne.Quest;
+using Dafhne.Stage;
 using Dafhne.Util;
 using UnityEngine;
 
@@ -31,6 +32,7 @@ namespace Dafhne.Board
         Transform _rootObj;
         GameObject _cellPrefab;
         GameObject _blockPrefab;
+        StageBuilder _stageBuilder;
 
         BoardEnumerator _enumerator;
 
@@ -48,12 +50,13 @@ namespace Dafhne.Board
             _enumerator = new BoardEnumerator(this);
         }
 
-        internal void ComposeStage(GameObject cellPrefab, GameObject blockPrefab, Transform rootObj)
+        internal void ComposeStage(GameObject cellPrefab, GameObject blockPrefab, Transform rootObj, StageBuilder stageBuilder)
         {
             //1. 스테이지 구성에 필요한 Cell, Block, rootObj(Board) 정보를 저장한다. 
             _cellPrefab = cellPrefab;
             _blockPrefab = blockPrefab;
             _rootObj = rootObj;
+            _stageBuilder = stageBuilder;
 
             //2. 3매치된 블럭이 없도록 섞는다.
             BoardShuffler shuffler = new BoardShuffler(this, true);
@@ -374,6 +377,60 @@ namespace Dafhne.Board
                 return false;
             }
             return _blocks[nRow, nCol] == null;
+        }
+
+        public IEnumerator SpwanBlocksAfterClean(List<Block> movingBlocks)
+        {
+            for(int nCol = 0; nCol < MaxCol; nCol++)
+            {
+                for(int nRow = 0; nRow < MaxRow; nRow++)
+                {
+                    //비어있는 블럭이 있는경우, 상위 열은 모두 비어있거나, 장애물로 인해서 남아있음.
+                    if(_blocks[nRow, nCol] == null)
+                    {
+                        int nTopRow = nRow;
+
+                        int nSpwanBaseY = 0;
+                        for(int y = nTopRow; y< MaxRow; y++)
+                        {
+                            if(_blocks[y, nCol] != null || !CanBlockBeAllocatable(y,nCol))
+                            {
+                                continue;
+                            }
+
+                            Block block = SpwanBlockWithDrop(y, nCol, nSpwanBaseY, nCol);
+                            if(block != null)
+                            {
+                                movingBlocks.Add(block);
+                            }
+
+                            nSpwanBaseY++;
+                        }
+
+                        break;
+                    }       
+                }    
+            }
+
+            yield return null;
+        }
+
+         //블럭을 생성하고 목적지(nRow, nCol) 까지 드롭한다.
+        //@parm nRow, nCol : 생성후 보드에 저장되는 위치
+        //@parm nSpawnedRow, nSpawnedCol : 화면에 생성되는 위치, nRow, nCol 위치까지 드롭 액션이 연출된다.
+        Block SpwanBlockWithDrop(int nRow, int nCol, int nSpawnedRow, int nSpawnedCol)
+        {
+            float fInitX = CalcInitX(Core.Constants.BLOCK_ORG);
+            float fInitY = CalcInitY(Core.Constants.BLOCK_ORG) + MaxRow;
+
+            Block block = _stageBuilder.SpawnBlock().InstantiateBlockObj(_blockPrefab, _rootObj);
+            if(block != null)
+            {
+                _blocks[nRow, nCol] = block;
+                block.Move(fInitX + (float)nSpawnedCol, fInitY + (float)nSpawnedRow);
+                block.dropDistance = new Vector2(nSpawnedCol - nCol, MaxRow + (nSpawnedRow - nRow));
+            }
+            return block;
         }
     }
 }
