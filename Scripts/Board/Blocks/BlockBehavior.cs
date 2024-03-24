@@ -44,6 +44,8 @@ namespace Dafhne.Board
 
         IEnumerator CoStartSimpleExplosion(bool isDestroy = true)
         {
+            yield return Util.Action2D.Scale(transform, Core.Constants.BLOCK_DESTORY_SCALE, 4f);
+
             //1. 폭파싴키는 효과 연출 : 블럭 자체의 Clear효과를 연출한다. (모든 블럭 동일)
             GameObject explosionObj = _blockConfig.GetExplosionObject(BlockQuestType.CLEAR_SIMPLE);
             ParticleSystem.MainModule newModule = explosionObj.GetComponent<ParticleSystem>().main;
