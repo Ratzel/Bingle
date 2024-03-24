@@ -47,6 +47,8 @@ namespace Dafhne.Stage
             {
                 _isRunning = true; //액션 실행 상태 On
 
+                SoundManager.instance.PlayOneShot(Clip.Chomp);
+
                 //1. swipe action 수행
                 Returnable<bool> isSwipeBlock = new Returnable<bool>(false);
                 yield return _stage.CoDoSwipeAction(nRow, nCol, swipeDir, isSwipeBlock);
@@ -82,7 +84,8 @@ namespace Dafhne.Stage
                 if(isBlockMatched.value)
                 {
                     matchResult.value = true;
-
+                    SoundManager.instance.PlayOneShot(Clip.BlockClear);
+                    
                     //매칭 블럭 제거 후 빈블럭 드롭 후 새 블럭 생성
                     yield return StartCoroutine(_stage.PostProcessAfterEvaluate());
                 }
