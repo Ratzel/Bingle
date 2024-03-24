@@ -29,3 +29,4 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 622fe185c4f54483b80234bf9f0912ad, type: 3}
   - {fileID: 21300000, guid: c7dd367c1147f4dd1aaecaeec9641f7d, type: 3}
   - {fileID: 21300000, guid: 589557642a5a94647bccdba644a639ec, type: 3}
+  explosion: {fileID: 7653333136782322543, guid: 76af07a8da7cc40c0bced0b64077df70, type: 3}

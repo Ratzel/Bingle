@@ -38,7 +38,30 @@ namespace Dafhne.Board
 
         public void DoActionClear()
         {
-            Destroy(gameObject);
+            // Destroy(gameObject);
+            StartCoroutine(CoStartSimpleExplosion(true));
+        }
+
+        IEnumerator CoStartSimpleExplosion(bool isDestroy = true)
+        {
+            //1. 폭파싴키는 효과 연출 : 블럭 자체의 Clear효과를 연출한다. (모든 블럭 동일)
+            GameObject explosionObj = _blockConfig.GetExplosionObject(BlockQuestType.CLEAR_SIMPLE);
+            ParticleSystem.MainModule newModule = explosionObj.GetComponent<ParticleSystem>().main;
+            newModule.startColor = _blockConfig.GetBlockColor(_block.BlockElement);
+            explosionObj.SetActive(true);
+            explosionObj.transform.position = this.transform.position;
+
+            yield return new WaitForSeconds(0.1f);
+
+            //2. 블럭 GameObject 갳체 삭제 or make size zero
+            if(isDestroy)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                Debug.Assert(false, "Unknown Action : Gameobject No Destory After Particle");
+            }
         }
     }
 }
