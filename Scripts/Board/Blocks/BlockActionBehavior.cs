@@ -9,6 +9,7 @@ namespace Dafhne.Board
 {
     public class BlockActionBehavior : MonoBehaviour
     {
+        [SerializeField] BlockConfig _blockConfig;
         public bool isMoving { get; set; }
 
         Queue<Vector3> _movementQueue = new Queue<Vector3>(); // x=col, y=row, z = acceleration
@@ -34,7 +35,8 @@ namespace Dafhne.Board
             {
                 Vector2 vecDestination = _movementQueue.Dequeue();
 
-                float duration = Core.Constants.DROP_TIME;
+                int dropIndex = System.Math.Min(9, System.Math.Max(1, (int)Mathf.Abs(vecDestination.y)));
+                float duration = _blockConfig.dropSpeed[dropIndex-1];
                 yield return CoStartDropSmooth(vecDestination, duration * acc);
             }
 
